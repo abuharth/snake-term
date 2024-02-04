@@ -1,7 +1,7 @@
 # snake-term
 Snake game in terminal written in c. Featuring adaptive resizing and colored text graphics!
 
-![](/images/Capture.PNG)
+![](/images/snake.gif)
 
 ## Dependencies
 The only dependency is ncurses, install on debian/ubuntu via 
