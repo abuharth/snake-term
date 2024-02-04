@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <curses.h>
 
-// add command line arguments to the program
+// TODO: add command line arguments to the program
     // allow to set fixed screen size
     // otherwise screensize is adaptive
 
