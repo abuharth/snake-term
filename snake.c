@@ -192,6 +192,7 @@ int main(int argc, char *argv[]) {
                 }
                 erase();
 
+                // death animation
                 score = score > 0? score - 1 : 0;
 
                 // draw snake
@@ -199,7 +200,9 @@ int main(int argc, char *argv[]) {
                 for (int i = 0; i < score; i++) {
                     mvaddch(segments[i].y + 1, segments[i].x * 2 + 1, 'o');
                 }
-                mvaddch(head.y + 1, head.x * 2 + 1, head_char);
+                if (score > 0) {
+                    mvaddch(head.y + 1, head.x * 2 + 1, head_char);
+                }
                 attroff(COLOR_PAIR(2));
                 
                 // GAME OVER text
