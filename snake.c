@@ -76,7 +76,7 @@ int main(int argc, char *argv[]) {
     vec2d dir = { 1, 0 };
     char head_char = '>';
 
-    vec2d food = { rand() % (screen_width + 1), rand() % screen_height };
+    vec2d berry = { rand() % (screen_width + 1), rand() % screen_height };
 
     char score_message[32];
     sprintf(score_message, "  Score: %d  ", score);
@@ -146,18 +146,18 @@ int main(int argc, char *argv[]) {
         }
 
         // keep berry on screen when resizing
-        if (food.x > screen_width){
-            food.x = screen_width;
+        if (berry.x > screen_width){
+            berry.x = screen_width;
         }
-        if (food.y > screen_height - 1) {
-            food.y = screen_height - 1;
+        if (berry.y > screen_height - 1) {
+            berry.y = screen_height - 1;
         }
 
         erase();
 
-        // draw food
+        // draw berry
         attron(COLOR_PAIR(1));
-        mvaddch(food.y + 1, food.x * 2 + 1, '@');
+        mvaddch(berry.y + 1, berry.x * 2 + 1, '@');
         attroff(COLOR_PAIR(1));
 
         // draw snake
@@ -217,7 +217,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        if (food.x == head.x && food.y == head.y) {
+        if (berry.x == head.x && berry.y == head.y) {
             if (score < MAX_LENGTH) {
                 score += 1;
             }
@@ -226,9 +226,9 @@ int main(int argc, char *argv[]) {
             }
             sprintf(score_message, "  Score: %d  ", score);
 
-            while(collide_snake(food) || (food.x == head.x && food.y == head.y)) {
-                food.x = rand() % (screen_width + 1);
-                food.y = rand() % screen_height;
+            while(collide_snake(berry) || (berry.x == head.x && berry.y == head.y)) {
+                berry.x = rand() % (screen_width + 1);
+                berry.y = rand() % screen_height;
             }
         }
 
