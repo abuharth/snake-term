@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -38,6 +39,21 @@ void draw_border(int width, int height, char c) {
 }
 
 int main(int argc, char *argv[]) {
+    // process command line args
+    bool looping;
+    if (argc == 1) {
+        looping = false;
+    }
+    else if (argc == 2) {
+        if (!strcmp(argv[1], "-h") || !strcmp(argv[1], "--help")) {
+            printf("usage: snake <argument>\n-l:\t\tlooping\n[DEFAULT]:\tno looping\n");
+            exit(0);
+        }
+        else if (!strcmp(argv[1], "-l")) {
+            looping = true;
+        }
+    }
+
     WINDOW *win = initscr();
 
     int screen_width;
@@ -63,6 +79,7 @@ int main(int argc, char *argv[]) {
     init_pair(1, COLOR_RED, -1);
     init_pair(2, COLOR_GREEN, -1);
 
+    // take input, non-blocking, and hide cursor
     keypad(win, true);
     nodelay(win, true);
     curs_set(0);
@@ -131,18 +148,20 @@ int main(int argc, char *argv[]) {
         head.x += dir.x;
         head.y += dir.y;
 
-        // snake loops through screen
-        if (head.x < 0) {
-            head.x = screen_width;
-        }
-        if (head.x > screen_width) {
-            head.x = 0;
-        }
-        if (head.y < 0) {
-            head.y = screen_height - 1;
-        }
-        if (head.y > screen_height - 1) {
-            head.y = 0;
+        // loops through play area
+        if (looping) {
+            if (head.x < 0) {
+                head.x = screen_width;
+            }
+            if (head.x > screen_width) {
+                head.x = 0;
+            }
+            if (head.y < 0) {
+                head.y = screen_height - 1;
+            }
+            if (head.y > screen_height - 1) {
+                head.y = 0;
+            }
         }
 
         // keep berry on screen when resizing
@@ -176,11 +195,13 @@ int main(int argc, char *argv[]) {
 
         mvaddstr(0, screen_width - 5, score_message);
 
-        if (collide_snake(head)) {
+        // game over
+        if (collide_snake(head) || head.x < 0 || head.x > screen_width || head.y < 0 || head.y > screen_height - 1) {
             while(true) {
                 int pressed = wgetch(win);
                 if (pressed == ' ') {
                     score = 0;
+                    num_berries = 1;
                     head.x = 0;
                     head.y = 0;
                     dir.x = 1;
