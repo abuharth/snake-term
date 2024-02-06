@@ -4,11 +4,6 @@
 #include <stdbool.h>
 #include <curses.h>
 
-// TODO: add command line arguments to the program
-    // multiple berries
-    // allow to set fixed screen size
-    // otherwise screensize is adaptive
-
 #define MAX_LENGTH 256
 #define FRAME_TIME 125000
 
