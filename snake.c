@@ -5,7 +5,7 @@
 #include <curses.h>
 
 #define MAX_LENGTH 256
-#define FRAME_TIME 125000
+#define FRAME_TIME 100000
 
 typedef struct {
     int x;
@@ -147,11 +147,11 @@ int main(int argc, char *argv[]) {
 
         // keep berry on screen when resizing
         for (int i = 0; i < num_berries; i++) {
-            if (berry.x > screen_width){
-                berry.x = screen_width;
+            if (berries[i].x > screen_width){
+                berries[i].x = screen_width;
             }
-            if (berry.y > screen_height - 1) {
-                berry.y = screen_height - 1;
+            if (berries[i].y > screen_height - 1) {
+                berries[i].y = screen_height - 1;
             }
         }
 
