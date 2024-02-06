@@ -5,7 +5,7 @@
 #include <curses.h>
 
 #define MAX_LENGTH 256
-#define FRAME_TIME 100000
+#define FRAME_TIME 110000
 
 typedef struct {
     int x;
