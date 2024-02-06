@@ -5,10 +5,12 @@
 #include <curses.h>
 
 // TODO: add command line arguments to the program
+    // multiple berries
     // allow to set fixed screen size
     // otherwise screensize is adaptive
 
 #define MAX_LENGTH 256
+#define FRAME_TIME 125000
 
 typedef struct {
     int x;
@@ -188,10 +190,27 @@ int main(int argc, char *argv[]) {
                     endwin();
                     exit(0);
                 }
+                erase();
+
+                score = score > 0? score - 1 : 0;
+
+                // draw snake
+                attron(COLOR_PAIR(2));
+                for (int i = 0; i < score; i++) {
+                    mvaddch(segments[i].y + 1, segments[i].x * 2 + 1, 'o');
+                }
+                mvaddch(head.y + 1, head.x * 2 + 1, head_char);
+                attroff(COLOR_PAIR(2));
+                
+                // GAME OVER text
                 attron(COLOR_PAIR(1));
                 mvaddstr(screen_height - 2, screen_width - 3, "GAME OVER");
                 mvaddstr(screen_height - 1, screen_width - 15, "[SPACE] = RESTART | [ESC] = EXIT");
                 attroff(COLOR_PAIR(1));
+
+                mvaddstr(0, screen_width - 5, score_message);
+                
+                usleep(FRAME_TIME);
             }
         }
 
@@ -210,7 +229,7 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        usleep(100000);
+        usleep(FRAME_TIME);
 
     }
 
