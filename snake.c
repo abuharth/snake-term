@@ -76,7 +76,12 @@ int main(int argc, char *argv[]) {
     vec2d dir = { 1, 0 };
     char head_char = '>';
 
-    vec2d berry = { rand() % (screen_width + 1), rand() % screen_height };
+    bool spawn_berry = false;
+    vec2d berries[32];
+    int num_berries = 1;
+
+    vec2d berry = { 1 + rand() % (screen_width - 1), 1 + rand() % (screen_height - 2) };
+    berries[0] = berry;
 
     char score_message[32];
     sprintf(score_message, "  Score: %d  ", score);
@@ -146,19 +151,23 @@ int main(int argc, char *argv[]) {
         }
 
         // keep berry on screen when resizing
-        if (berry.x > screen_width){
-            berry.x = screen_width;
-        }
-        if (berry.y > screen_height - 1) {
-            berry.y = screen_height - 1;
+        for (int i = 0; i < num_berries; i++) {
+            if (berry.x > screen_width){
+                berry.x = screen_width;
+            }
+            if (berry.y > screen_height - 1) {
+                berry.y = screen_height - 1;
+            }
         }
 
         erase();
 
-        // draw berry
-        attron(COLOR_PAIR(1));
-        mvaddch(berry.y + 1, berry.x * 2 + 1, '@');
-        attroff(COLOR_PAIR(1));
+        // draw berries
+        for (int i = 0; i < num_berries; i ++) {
+            attron(COLOR_PAIR(1));
+            mvaddch(berries[i].y + 1, berries[i].x * 2 + 1, '@');
+            attroff(COLOR_PAIR(1));
+        }
 
         // draw snake
         attron(COLOR_PAIR(2));
@@ -190,21 +199,7 @@ int main(int argc, char *argv[]) {
                     endwin();
                     exit(0);
                 }
-                erase();
 
-                // death animation
-                score = score > 0? score - 1 : 0;
-
-                // draw snake
-                attron(COLOR_PAIR(2));
-                for (int i = 0; i < score; i++) {
-                    mvaddch(segments[i].y + 1, segments[i].x * 2 + 1, 'o');
-                }
-                if (score > 0) {
-                    mvaddch(head.y + 1, head.x * 2 + 1, head_char);
-                }
-                attroff(COLOR_PAIR(2));
-                
                 // GAME OVER text
                 attron(COLOR_PAIR(1));
                 mvaddstr(screen_height - 2, screen_width - 3, "GAME OVER");
@@ -217,19 +212,35 @@ int main(int argc, char *argv[]) {
             }
         }
 
-        if (berry.x == head.x && berry.y == head.y) {
-            if (score < MAX_LENGTH) {
-                score += 1;
-            }
-            else {
-                // WIN!
-            }
-            sprintf(score_message, "  Score: %d  ", score);
+        for (int i = 0; i < num_berries; i ++) {
+            if (berries[i].x == head.x && berries[i].y == head.y) {
+                if (score < MAX_LENGTH) {
+                    score += 1;
+                    if (score % 10 == 0) {
+                        spawn_berry = true;
+                    }
+                }
+                else {
+                    // WIN!
+                }
+                sprintf(score_message, "  Score: %d  ", score);
 
-            while(collide_snake(berry) || (berry.x == head.x && berry.y == head.y)) {
-                berry.x = rand() % (screen_width + 1);
-                berry.y = rand() % screen_height;
+                while(collide_snake(berries[i]) || (berries[i].x == head.x && berries[i].y == head.y)) {
+                    berries[i].x = 1 + rand() % (screen_width - 1);
+                    berries[i].y = 1 + rand() % (screen_height - 2);
+                }
             }
+        }
+
+        if (spawn_berry == true) {
+            num_berries += 1;
+            vec2d new_berry = { 1 + rand() % (screen_width - 1), 1 + rand() % (screen_height - 2) };
+            while(collide_snake(new_berry) || (new_berry.x == head.x && new_berry.y == head.y)) {
+                new_berry.x = 1 + rand() % (screen_width - 1);
+                new_berry.y = 1 + rand() % (screen_height - 2);
+            }
+            berries[num_berries - 1] = new_berry;
+            spawn_berry = false;
         }
 
         usleep(FRAME_TIME);
