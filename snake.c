@@ -211,7 +211,6 @@ int main(int argc, char *argv[]) {
                     break;
                 }
                 if (pressed == '\e') {
-                    getch();
                     endwin();
                     exit(0);
                 }
@@ -263,7 +262,6 @@ int main(int argc, char *argv[]) {
 
     }
 
-    getch();
     endwin();
 
     return 0;
