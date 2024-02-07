@@ -139,8 +139,8 @@ int main(int argc, char *argv[]) {
         }
 
         // update snake segments
-        for (int i = 0; i < score; i++) {
-            segments[score - i] = segments[score - i - 1];
+        for (int i = score; i > 0; i--) {
+            segments[i] = segments[i - 1];
         }
 
         segments[0] = head;
