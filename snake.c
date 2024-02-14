@@ -176,10 +176,10 @@ void game_over() {
     while (is_running == false) {
         process_input();
 
-        mvaddstr(screen_height / 2, screen_width - 17, "             Game Over          ");
-        mvaddstr(screen_height / 2 + 1, screen_width - 17, "[SPACE] to restart, [ESC] to quit");
+        mvaddstr(screen_height / 2, screen_width - 16, "              Game Over          ");
+        mvaddstr(screen_height / 2 + 1, screen_width - 16, "[SPACE] to restart, [ESC] to quit ");
         attron(COLOR_PAIR(3));
-        draw_border(screen_height / 2 - 1, screen_width - 18, 17, 2);
+        draw_border(screen_height / 2 - 1, screen_width - 17, 17, 2);
         attroff(COLOR_PAIR(3));
 
         usleep(FRAME_TIME);
@@ -238,7 +238,7 @@ void draw() {
     attron(COLOR_PAIR(3));
     draw_border(0, 0, screen_width, screen_height);
     attroff(COLOR_PAIR(3));
-    mvaddstr(0, screen_width - 6, score_message);
+    mvaddstr(0, screen_width - 5, score_message);
 }
 
 int main(int argc, char *argv[]) {
